@@ -4,37 +4,47 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    CharacterController controller;
+    [Header("Movement")]
+    public float moveSpeed;
 
-    Vector3 velocity;
+    public Transform orientation;
 
-    bool IsGrounded;
+    float horizontalInput;
+    float verticalInput;
 
-    public Transform ground;
-    public float distance = 0.3f;
+    Vector3 moveDirection;
 
-    public float speed;
-    public float gravity;
-
-    public LayerMask mask;
+    Rigidbody rb;
 
     public void Start()
     {
-        controller = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
     }
-    public void Update()
+    private void Update()
     {
-        #region Movement
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-
-        Vector3 move = transform.right * horizontal + transform.forward * vertical;
-        controller.Move(move * speed * Time.deltaTime);
-
-        #endregion
-
-
+        MyInput();
     }
+
+    private void FixedUpdate()
+    {
+        MovePlayer();
+    }
+
+    private void MyInput()
+    {
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+    }
+    private void MovePlayer()
+    {
+        //Yönü hesaplar
+        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+
+        rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+    }
+
+
 
 
 }

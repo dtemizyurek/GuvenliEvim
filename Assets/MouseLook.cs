@@ -5,23 +5,29 @@ using UnityEngine;
 public class MouseLook : MonoBehaviour
 {
     [Range(50, 100)]
-    public float sens;
+    public float sensX;
+    public float sensY;
 
-    public Transform body;
 
-    float xRot = 0f;
+    public Transform oreintation;
+
+     float xRotation;
+     float yRotation;
 
     private void Update()
     {
-        float rotX = Input.GetAxisRaw("Mouse X") * sens * Time.deltaTime;
-        float rotY = Input.GetAxisRaw("Mouse Y") * sens * Time.deltaTime;
-
-        xRot -= rotY;
-        //xRot = Mathf.Clamp(xRot, 80.0f, -80.0f);
+        float mouseX = Input.GetAxisRaw("Mouse X") * sensX * Time.deltaTime;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * sensY * Time.deltaTime;
 
 
-        transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
-        body.Rotate(Vector3.up * rotX);
+        yRotation += mouseX;
+        xRotation -= mouseY;
+
+
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        oreintation.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+
 
 
     }
